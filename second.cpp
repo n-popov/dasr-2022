@@ -1,26 +1,21 @@
 #include <iostream>
+#include <algorithm>
 
 int main() {
-    int n, x;
-    int coins[1000];
+    int n;
     std::cin >> n;
-    for (auto i = 0; i < n; std::cin >> coins[i++]);
-    std::cin >> x;
-    for (auto i = 0; i < n; i++) {
-        for(auto j = n - 1; j > i; j--) {
-            if (coins[j] > coins[j - 1]) {
-                coins[j] = coins[j - 1] + coins[j];
-                coins[j - 1] = coins[j] - coins[j - 1];
-                coins[j] = coins[j] - coins[j - 1];
-            }
-        }
+    int first, second, third;
+    std::cin >> first;
+    if (n == 1) {
+        std::cout << 0;
+        return 0;
     }
-    int count = 0;
-    for(auto i = 0; i < n; i++) {
-        if (coins[i] <= x) {
-            count++;
-            x -= coins[i];
-        }
+    std::cin >> second;
+    for(auto i = 0; i+++ 2 < n;) {
+        std::cin >> third;
+        third = std::min(first + third, second + third);
+        first = second;
+        second = third;
     }
-    std::cout << ((x > 0) ? -1 : count);
+    std::cout << std::min(first, second);
 }
