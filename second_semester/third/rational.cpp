@@ -1,11 +1,19 @@
 #include <iostream>
+#include <thread>
 
 using namespace std;
 
 class Rational {
 public:
     // Конструктор дроби, здесь a - числитель, b - знаменатель
-    Rational(int a, int b): a(a), b(b) {}
+    Rational(int a, int b) {
+    	if (b == 0) {
+		throw std::invalid_argument("Denominator is zero");
+	}
+	this->a = a;
+	this->b = b;
+    }
+
     
     // Реализуйте операторы:
     // - сложения двух дробей
@@ -60,6 +68,19 @@ int main()
     cout << a / b << endl;
     cout << 3 * a << endl;
     cout << b * 4 << endl;
+ 	
+    //std::thread t([](Rational a, Rational b){for (;;) a = a + b;}, a, b);
+
+    try {
+        Rational impossible(42, 0);
+    } catch(std::invalid_argument& ex) {
+	    std::cout << "Caught invalid argument" << std::endl;
+	    std::cout << ex.what() << std::endl;
+    } catch(std::exception& ex) {
+	    std::cout << "Caught base exception" << std::endl;
+    } catch(...) {
+	    std::cout << "Caught something" << std::endl;
+    }
 
     return 0;
 }

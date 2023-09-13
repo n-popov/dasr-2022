@@ -1,5 +1,21 @@
 # Материалы
 
+# Третий семестр
+
+## Второй семинар
+
++ [Код с семинара](https://github.com/n-popov/dasr-2022/blob/master/third_semester/second)
+
+## Контест 2
+
++ [Решения задач](https://github.com/n-popov/dasr-2022/blob/master/third_semester/second_contest)
+
+## Контрольная 2020
+
++ [Решения задач](https://github.com/n-popov/dasr-2022/blob/master/third_semester/contest_2020)
+
+# Второй семестр
+
 ## Второй семинар
 
 + [Код с семинара](https://github.com/n-popov/dasr-2022/blob/master/second_semester/second)
