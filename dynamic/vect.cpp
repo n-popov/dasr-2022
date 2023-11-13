@@ -30,8 +30,15 @@ struct Vector {
         data[_size++] = element;
     }
 
+    // insert element at position #index
     void insert(T elem, int index) {
-
+        push_back(T()); // add fake element
+        // T is default constructor call
+        // int() == 0, double() == 0., etc.
+        for (auto i = _size - 1; i > index; i--) {
+            data[i] = data[i - 1];
+        }
+        data[index] = elem;
     }
 
     // Address element by index
@@ -96,6 +103,12 @@ int main() {
                 array.size() << ' ' <<
                 array.capacity() << std::endl;
         }
+
+        array.insert(42, 0);
+        for (auto i = 0; i < array.size(); i++) {
+            std::cout << array[i] << ' ';
+        }
+        std::cout << std::endl;
     }
 
     auto s = Stack<float>();
