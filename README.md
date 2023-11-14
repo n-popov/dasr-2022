@@ -2,6 +2,10 @@
 
 # Третий семестр
 
+## Джанго
+
++ [Проект](https://github.com/n-popov/dasr-2022/blob/master/third_semester/djangoproject)
+
 ## Второй семинар
 
 + [Код с семинара](https://github.com/n-popov/dasr-2022/blob/master/third_semester/second)
