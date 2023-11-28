@@ -12,7 +12,24 @@ def all(request):
     return render(request, template_name='all.html', 
                   context={'people': people})
 
-@csrf_exempt
+def remove(request, idtf):
+    p = Person.objects.get(id=idtf)
+    p.delete()
+
+    return JsonResponse({})
+
+def update(request):
+    person = json.loads(request.body.decode())
+    p = Person.objects.get(id=person['id'])
+    p.name = person['name']
+    p.group = person['group']
+    p.age = person['age']
+    p.fav_manufacturer = person['fav_manufacturer']
+    p.save()
+
+    return JsonResponse(person, status=200)
+    
+
 def add(request):
     if request.method == 'POST':
         person = json.loads(request.body.decode())

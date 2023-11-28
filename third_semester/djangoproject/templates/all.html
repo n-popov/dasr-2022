@@ -23,15 +23,22 @@
 				<th>Age</th>
 				<th>Group</th>
 				<th>Favourite</th>
+				<th></th>
+				<th></th>
 			</tr>
 		</thead>
-		<tbody>
+		<tbody id="people-table">
 			{% for person in people %}
-			<tr>
+			<tr id="row{{person.id}}">
 				<td>{{person.name}}</td>
 				<td>{{person.age}}</td>
 				<td>{{person.group}}</td>
 				<td>{{person.fav_manufacturer}}</td>
+				<td><button class="btn btn-danger" onclick=remove({{person.id}})>X</button></td>
+				<td>
+				<button class="btn btn-info" onclick=edit({{person.id}})>Edit</button>
+				<button class="btn btn-info" onclick=update({{person.id}})>Save</button>
+				</td>
 			</tr>
 			{% endfor %}
 			<tr>
@@ -47,6 +54,69 @@
 	</main>
 </body>
 <script>
+	function getCSRFCookie() {
+		const cookies = document.cookie;
+		const arrcookies = cookies.split(';');
+		for (const cookie of arrcookies) {
+			if (cookie.includes('csrftoken')) {
+				return cookie.slice(10, cookie.length);
+			}
+		}
+		return '';
+	}
+	function edit(id) {
+		const r = document.getElementById(`row${id}`);
+		let childIndex = 0;
+		for (const cell of r.children) {
+			if (childIndex++ > 3) {
+				break;
+			}
+			const newInput = document.createElement('input');
+			newInput.value = cell.innerText;
+			cell.innerText = '';
+			cell.appendChild(newInput);
+		}
+	}
+
+	function update(id) {
+		const inputValues = [];
+		const r = document.getElementById(`row${id}`);
+		for (let i = 0; i < 4; i++) {
+			const cell = r.children[i];
+			const input = cell.getElementsByTagName('input')[0];
+			inputValues.push(input.value);
+		}
+		console.log(inputValues);
+		const data = {
+			id: id,
+			name: inputValues[0],
+			age: Number(inputValues[1]),
+			group: inputValues[2],
+			fav_manufacturer: inputValues[3],
+		};
+		
+		fetch('/people/update/', {
+			method: 'POST',
+			body: JSON.stringify(data),
+			headers: { 
+				'Content-Type': 'application/json', 
+				'X-CSRFToken': getCSRFCookie(),
+			},
+		}).then((response) => {
+			window.location.reload();
+		});
+
+	}
+
+	function remove(id) {
+		fetch(`/people/remove/${id}/`)
+		.then(() => {
+			const r = document.getElementById(`row${id}`);
+			r.remove();
+		});
+	}
+
+
 	function add() {
 		const name = document.getElementById('iname').value;
 		const age = document.getElementById('iage').value;
@@ -64,10 +134,37 @@
 		fetch('/people/add/', {
 			method: 'POST',
 			body: JSON.stringify(person),
-			headers: { 'Content-Type': 'application/json' },
+			headers: { 
+				'Content-Type': 'application/json',
+				'X-CSRFToken': getCSRFCookie(),
+			},
+		}).then((response) => {
+			console.log(response);
+			//window.location.reload();
+			return response.json();
 		}).then((data) => {
-			window.location.reload();
-		})
+			const tbody = document.getElementById('people-table');
+			const newRow = document.createElement('tr');
+			const nameCell = document.createElement('td');
+			nameCell.innerText = data.name;
+			newRow.appendChild(nameCell);
+
+			const ageCell = document.createElement('td');
+			ageCell.innerText = data.age;
+			newRow.appendChild(ageCell);
+			
+			const gCell = document.createElement('td');
+			gCell.innerText = data.group;
+			newRow.appendChild(gCell);
+
+			
+			const carCell = document.createElement('td');
+			carCell.innerText = data.fav_manufacturer;
+			newRow.appendChild(carCell);
+			tbody.appendChild(newRow);
+
+		});
+
 	}
 </script>
 </html>
