@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+	<title>People</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<style>
+	main {
+		width: 100px;
+		margin: auto;
+	}
+	td, th {
+		width: 100px;
+	}
+</style>
+</head>
+<body>
+	<main>
+	<table class='table'>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Age</th>
+				<th>Group</th>
+				<th>Favourite</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for person in people %}
+			<tr>
+				<td>{{person.name}}</td>
+				<td>{{person.age}}</td>
+				<td>{{person.group}}</td>
+				<td>{{person.fav_manufacturer}}</td>
+			</tr>
+			{% endfor %}
+			<tr>
+				<td><input id='iname' type='text'></td>
+				<td><input id='iage' type='text'></td>
+				<td><input id='igroup' type='text'></td>
+				<td><input id='icar' type='text'></td>
+			</tr>
+
+		</tbody>
+	</table>
+<button class='btn btn-success' onclick=add()>Add</button>
+	</main>
+</body>
+<script>
+	function add() {
+		const name = document.getElementById('iname').value;
+		const age = document.getElementById('iage').value;
+		const group = document.getElementById('igroup').value;
+		const car = document.getElementById('icar').value;
+
+		console.log(name, age, group, car);
+		const person = {
+			name: name,
+			age: age,
+			group: group,
+			fav_manufacturer: car,
+		};
+
+		fetch('/people/add/', {
+			method: 'POST',
+			body: JSON.stringify(person),
+			headers: { 'Content-Type': 'application/json' },
+		}).then((data) => {
+			window.location.reload();
+		})
+	}
+</script>
+</html>
